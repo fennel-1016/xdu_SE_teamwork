@@ -1,0 +1,47 @@
+# ==========================================
+# 1. 全局与系统文件忽略
+# ==========================================
+.DS_Store
+Thumbs.db
+*.log
+*.swp
+.idea/
+.vscode/
+
+# ==========================================
+# 2. 前端 (Uni-app / Vue / Node.js) 忽略
+# ==========================================
+fandian-frontend/node_modules/
+fandian-frontend/unpackage/
+fandian-frontend/.sourcemaps/
+fandian-frontend/.hbuilderx/
+
+# ==========================================
+# 3. 后端 (Java / Spring Boot / Maven) 忽略
+# ==========================================
+fandian-backend/target/
+fandian-backend/*.compiled
+fandian-backend/.classpath
+fandian-backend/.project
+fandian-backend/.settings/
+fandian-backend/*.hprof
+fandian-backend/*.pfx
+
+# ==========================================
+# 4. 数据组 (Python / 爬虫) 忽略
+# ==========================================
+fandian-crawler/__pycache__/
+fandian-crawler/*.pyc
+fandian-crawler/*.pyo
+fandian-crawler/*.pyd
+fandian-crawler/.venv/
+fandian-crawler/venv/
+fandian-crawler/ENV/
+fandian-crawler/.pytest_cache/
+
+# ==========================================
+# 5. 配置文件与敏感信息（群组联调私有配置）
+# ==========================================
+# 如果后端或爬虫有包含本地数据库密码、微信AppSecret的私密文件，建议放行模板，忽略本地真文件
+# *.local
+# application-dev.properties
