@@ -1,0 +1,35 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: fandian-backend
+  datasource:
+    url: jdbc:mysql://localhost:3306/fandian?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf-8&allowPublicKeyRetrieval=true
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+# 微信小程序配置
+wechat:
+  appid: your_wechat_appid
+  secret: your_wechat_secret
+
+# 数据同步密钥（Python爬虫推送时校验）
+sync:
+  secret-key: your_sync_secret_key
+
+# 日志配置
+logging:
+  level:
+    com.fandian: DEBUG
+  file:
+    path: ./logs
+    name: ./logs/fandian.log

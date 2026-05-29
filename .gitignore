@@ -1,0 +1,25 @@
+# 饭电后端项目 - .gitignore
+
+# Maven
+target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 敏感配置（生产环境的 application-prod.yml 不要提交）
+application-prod.yml
+
+# 本地 MySQL 配置和脚本（每个人环境不同）
+my.ini
+start-mysql.bat
+stop-mysql.bat
