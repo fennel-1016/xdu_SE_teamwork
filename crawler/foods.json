@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "name": "一食堂香辣鸡腿饭",
+    "price": 16.0,
+    "rating": 4.7,
+    "distance": 180,
+    "category": "食堂窗口",
+    "available": true
+  },
+  {
+    "id": 2,
+    "name": "二食堂番茄牛腩面",
+    "price": 18.5,
+    "rating": 4.6,
+    "distance": 260,
+    "category": "食堂窗口",
+    "available": true
+  },
+  {
+    "id": 3,
+    "name": "校门口黄焖鸡米饭",
+    "price": 22.0,
+    "rating": 4.5,
+    "distance": 620,
+    "category": "校外美食",
+    "available": true
+  }
+]
