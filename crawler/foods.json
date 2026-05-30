@@ -1,0 +1,102 @@
+[
+  {
+    "id": 1,
+    "name": "一食堂香辣鸡腿饭",
+    "price": 16.0,
+    "rating": 4.7,
+    "distance": 180,
+    "category": "食堂窗口",
+    "image_url": "https://via.placeholder.com/160x120?text=chicken",
+    "available": true
+  },
+  {
+    "id": 2,
+    "name": "二食堂番茄牛腩面",
+    "price": 18.5,
+    "rating": 4.6,
+    "distance": 260,
+    "category": "食堂窗口",
+    "image_url": "https://via.placeholder.com/160x120?text=noodle",
+    "available": true
+  },
+  {
+    "id": 3,
+    "name": "校门口黄焖鸡米饭",
+    "price": 22.0,
+    "rating": 4.5,
+    "distance": 620,
+    "category": "校外美食",
+    "image_url": "https://via.placeholder.com/160x120?text=rice",
+    "available": true
+  },
+  {
+    "id": 4,
+    "name": "清真窗口牛肉拉面",
+    "price": 15.0,
+    "rating": 4.4,
+    "distance": 210,
+    "category": "食堂窗口",
+    "image_url": "https://via.placeholder.com/160x120?text=lamian",
+    "available": true
+  },
+  {
+    "id": 5,
+    "name": "三食堂麻辣香锅",
+    "price": 28.0,
+    "rating": 4.8,
+    "distance": 420,
+    "category": "食堂窗口",
+    "image_url": "https://via.placeholder.com/160x120?text=hotpot",
+    "available": true
+  },
+  {
+    "id": 6,
+    "name": "后街烤冷面",
+    "price": 9.0,
+    "rating": 4.2,
+    "distance": 780,
+    "category": "校外小吃",
+    "image_url": "https://via.placeholder.com/160x120?text=snack",
+    "available": true
+  },
+  {
+    "id": 7,
+    "name": "图书馆咖啡轻食",
+    "price": 24.0,
+    "rating": 4.3,
+    "distance": 120,
+    "category": "校园轻食",
+    "image_url": "https://via.placeholder.com/160x120?text=coffee",
+    "available": true
+  },
+  {
+    "id": 8,
+    "name": "东门炸鸡汉堡",
+    "price": 26.0,
+    "rating": 4.1,
+    "distance": 900,
+    "category": "校外美食",
+    "image_url": "https://via.placeholder.com/160x120?text=burger",
+    "available": false
+  },
+  {
+    "id": 9,
+    "name": "水果捞酸奶杯",
+    "price": 13.5,
+    "rating": 4.0,
+    "distance": 300,
+    "category": "校园甜品",
+    "image_url": "https://via.placeholder.com/160x120?text=yogurt",
+    "available": true
+  },
+  {
+    "id": 10,
+    "name": "北区砂锅米线",
+    "price": 17.0,
+    "rating": 4.6,
+    "distance": 510,
+    "category": "食堂窗口",
+    "image_url": "https://via.placeholder.com/160x120?text=mixian",
+    "available": true
+  }
+]

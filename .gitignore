@@ -30,14 +30,14 @@ fandian-backend/*.pfx
 # ==========================================
 # 4. 数据组 (Python / 爬虫) 忽略
 # ==========================================
-fandian-crawler/__pycache__/
-fandian-crawler/*.pyc
-fandian-crawler/*.pyo
-fandian-crawler/*.pyd
-fandian-crawler/.venv/
-fandian-crawler/venv/
-fandian-crawler/ENV/
-fandian-crawler/.pytest_cache/
+crawler/__pycache__/
+crawler/*.pyc
+crawler/*.pyo
+crawler/*.pyd
+crawler/.venv/
+crawler/venv/
+crawler/ENV/
+crawler/.pytest_cache/
 
 # ==========================================
 # 5. 配置文件与敏感信息（群组联调私有配置）

@@ -1,42 +1,90 @@
-饭电 (Fandian) - 自动化数据采集模块 🕷️
-本模块目前为主项目的子文件夹，负责承载 Python 自动化数据爬取、清洗与数据批量同步脚本。
-🛠️ 第一步：初始化 Python 虚拟环境
-请数据组负责人按照以下步骤，在当前空文件夹内配置好独立的运行环境：
-打开终端（Terminal），并切换到当前爬虫子目录：
+# 饭电 Python 数据采集模块
+
+本目录承载数据组负责的 Python 端能力：
+
+- 静态或模拟网页数据采集：`crawler.py`
+- 推荐分数计算：`recommender.py`
+- Java 后端同步推送：`pusher.py`
+- 命令行入口：`main.py`
+- 本地 mock 后端：`mock_java_server.py`
+
+## 环境初始化
+
+```bash
 cd crawler
-创建 Python 虚拟环境（防止第三方库污染全局环境）：
 python -m venv .venv
-激活虚拟环境：
-Windows 终端执行：.venv\Scripts\activate
-Mac / Linux 终端执行：source .venv/bin/activate
-（激活成功后，你的命令行开头会出现 (.venv) 提示字样）
-安装网络请求与数据处理的基础依赖库：
-pip install requests pandas
-将当前环境的依赖导出为标准文件，方便团队其他成员同步：
-pip freeze > requirements.txt
-在当前目录下新建你的核心 Python 脚本文件，例如命名为 main.py 或 scraper.py。
-🚀 第二步：数据推送协议与接口规范
-爬虫脚本将数据抓取并清洗完毕后，需要通过 HTTP POST 请求，将数据定时批量推送至后端 Java 服务器。
-目标推送 URL 地址：http://<后端同学的局域网IP>:8080/api/admin/sync
-安全鉴权请求头 (Header)：{"Sync-Key": "fandian_2026_secret"}
-请求体数据格式：标准的 JSON 数组（List[Dict]），每个字典内的字段必须严格对应以下命名规范：
+.venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+Mac / Linux 激活命令：
+
+```bash
+source .venv/bin/activate
+```
+
+## 常用命令
+
+采集静态数据并打印：
+
+```bash
+python main.py --crawl
+```
+
+解析模拟网页数据：
+
+```bash
+python main.py --crawl --source web
+```
+
+生成 Top-N 推荐：
+
+```bash
+python main.py --recommend --top-n 5 --prefer tasty
+```
+
+推送到后端同步接口：
+
+```bash
+python main.py --push --url http://<后端同学的局域网IP>:8080/api/admin/sync
+```
+
+启动本地 mock 后端测试推送：
+
+```bash
+python mock_java_server.py
+python main.py --push
+```
+
+## 后端同步协议
+
+默认同步接口：
+
+```text
+http://localhost:8080/api/admin/sync
+```
+
+默认鉴权请求头：
+
+```json
+{"Sync-Key": "fandian_2026_secret"}
+```
+
+默认请求体是 JSON 数组，字段格式如下：
+
+```json
 [
-{
-"food_name": "二楼黄焖鸡",
-"price": 15.00,
-"canteen_name": "教一食堂",
-"window_no": "12号窗口"
-},
-{
-"food_name": "香辣牛肉面",
-"price": 12.50,
-"canteen_name": "教二食堂",
-"window_no": "3号面档"
-}
+  {
+    "food_name": "二楼黄焖鸡",
+    "price": 15.0,
+    "canteen_name": "教一食堂",
+    "window_no": "12号窗口"
+  }
 ]
-📌 当前核心功能开发节点（按优先级排序）
-[ ] 1. 模拟数据（Mock）链路打通测试
-不要急着写复杂的爬虫解析代码。优先在脚本中写死一段符合上述 JSON 格式的假数据，使用 Python 的 requests.post 带着 Sync-Key 请求头发送给后端同学。只要后端反馈 200 且 MySQL 数据库中成功出现了这几条记录，说明三端联调链路彻底打通。
-[ ] 2. 编写真实美食抓取与清洗逻辑
-编写针对目标校园社区、食堂公示平台或周边美食网站的抓取逻辑。在将数据组装成 JSON 之前，务必进行清洗：剔除包含乱码、缺失价格、缺失档口名称的脏数据，确保最终送入后端的数据池质量。
-可自行更改调整readme文件
+```
+
+如果需要兼容旧接口的 `{"foods": [...]}` 包裹格式，可以加：
+
+```bash
+python main.py --push --wrap-payload
+```
