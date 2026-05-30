@@ -1,29 +1,113 @@
-饭电 (Fandian) - 后端业务服务层 ⚙️
-本模块目前为主项目的子文件夹，负责承载基于 Spring Boot 框架构建的业务服务端。
-🛠️ 第一步：初始化 Spring Boot 项目
-请后端负责人按照以下步骤，把框架结构初始化到当前 backend 文件夹内：
-打开 IntelliJ IDEA，点击 New Project。
-选择 Spring Initializr（如果没有，请检查是否安装了相关插件或使用官方脚手架网站 start.spring.io 生成后导入）。
-项目基本信息配置：
-Language: Java (推荐使用 JDK 1.8 或 17)
-Type: Maven
-Packaging: Jar
-在依赖选择 (Dependencies) 界面，务必勾选以下基础组件：
-Spring Web (用于构建 RESTful API 接口)
-MySQL Driver (MySQL 数据库驱动)
-Lombok (用于简化 Entity/DTO 的 getter/setter 编写)
-持久层框架（根据团队习惯自行二选一：MyBatis Framework / MyBatis-Plus，或者 Spring Data JPA）
-项目生成路径：选择你们本地的 XDU_SE_TEAMWORK/backend 目录，直接覆盖该空文件夹。
-🚀 第二步：数据库与本地环境搭建
-在本地 MySQL 中建立名为 fandian_db 的数据库，编码格式务必设置为 utf8mb4（防止后续微信昵称带表情包导致报错）。
-在 backend 目录下新建一个 sql 文件夹，将团队共用的建表语句存入 init.sql，并运行它初始化 t_user 和 t_food 表。
-修改 application.properties 或 application.yml 配置文件，将数据库连接的 url、username 和 password 改为你本地的配置。
-每日联调配合：本地服务默认启动在 8080 端口。启动成功后，在终端运行 ipconfig (Windows) 或 ifconfig (Mac/Linux)，找到你的局域网 IPv4 地址（如 192.168.1.100），将其发在项目微信群里，供前端组和爬虫组绑定调试。
-📌 当前核心功能开发节点（按优先级排序）
-[ ] 1. 用户认证接口 (POST /api/user/login)
-接收前端传来的微信 code，在后端利用 RestTemplate 或 HttpClient 向微信官方授权服务器发起请求，换取用户的唯一标识 OpenID。随后在 t_user 表中检索，若为新用户则自动注册，老用户则更新最后登录时间，最终将 OpenID 返回给前端。
-[ ] 2. 随机决策接口 (GET /api/food/random)
-响应小程序的抽选请求。从 Header 中校验 Authorization 带来的用户 OpenID。随后连接数据库，利用高效的随机 SQL 语句（如 SELECT * FROM t_food ORDER BY RAND() LIMIT 1）提取一条美食数据，并以标准的 JSON 格式返回给前端。
-[ ] 3. 数据同步接口 (POST /api/admin/sync)
-开放给爬虫组的批量数据推送接口。为了安全，必须在 Header 中校验双方约定好的私密密钥（Sync-Key）。校验通过后，接收解包后的美食 JSON 数组，执行批量插入或更新（建议利用 MySQL 的联合唯一索引配合 INSERT INTO ... ON DUPLICATE KEY UPDATE，防止重复数据流入）。
-可自行更改调整readme文件
+# 饭电后端项目 - 文件结构与用途说明
+
+## 项目概述
+本项目是"饭电"微信小程序的 Java Spring Boot 后端服务，负责提供用户认证（微信登录）、
+智能决策（随机抽选菜品）和后台数据同步（接收 Python 爬虫推送）三大核心功能。
+
+## 文件结构及用途
+
+```
+饭电-backend/
+│
+├── pom.xml                          # Maven 项目配置，定义依赖（Spring Boot、JPA、MySQL 等）
+├── .gitignore                       # Git 忽略规则
+│
+└── src/main/
+    ├── java/com/fandian/
+    │   │
+    │   ├── FandianApplication.java          # 【启动类】Spring Boot 应用入口
+    │   │
+    │   ├── controller/                      # 【控制层】处理 HTTP 请求，参数校验，调用 Service
+    │   │   ├── UserController.java          #   - POST /api/user/login    微信登录接口
+    │   │   ├── FoodController.java          #   - GET  /api/food/random   随机抽选接口
+    │   │   └── AdminController.java         #   - POST /api/admin/sync    数据同步接口（爬虫推送）
+    │   │
+    │   ├── service/                         # 【业务层】核心业务逻辑
+    │   │   ├── UserService.java             #   - 登录注册：code换OpenID → 新用户入库 / 老用户更新
+    │   │   ├── FoodService.java             #   - 随机抽选：ORDER BY RAND() 随机取菜
+    │   │   │                                #   - 数据同步：批量 UPSERT 菜品
+    │   │   └── WechatService.java           #   - 微信对接：调用 jscode2session 接口换取 OpenID
+    │   │
+    │   ├── model/
+    │   │   ├── entity/                      # 【实体类】与数据库表一一对应（JPA 映射）
+    │   │   │   ├── User.java                #   - t_user 表：openid, nickname, create_time, last_login_time
+    │   │   │   └── Food.java                #   - t_food 表：id, food_name, price, canteen_name, window_no, sync_time
+    │   │   └── dto/                         # 【数据传输对象】接口入参/出参的封装
+    │   │       ├── Result.java              #   - 统一响应体：{ code, msg, data }
+    │   │       ├── LoginRequest.java        #   - 登录请求：{ code, nickname }
+    │   │       ├── LoginResponse.java       #   - 登录响应：{ openid }
+    │   │       ├── FoodDTO.java             #   - 菜品返回：{ name, price, canteen, window }
+    │   │       └── SyncFoodRequest.java     #   - 同步请求：{ name, price, canteen, window }
+    │   │
+    │   ├── repository/                      # 【数据访问层】Spring Data JPA 接口
+    │   │   ├── UserRepository.java          #   - 用户表 CRUD
+    │   │   └── FoodRepository.java          #   - 菜品表 CRUD + 随机查询 + UPSERT
+    │   │
+    │   └── config/                          # 【配置类】
+    │       ├── GlobalExceptionHandler.java  #   - 全局异常拦截，将底层错误封装为友好 JSON
+    │       ├── CorsConfig.java              #   - 跨域配置，允许小程序前端访问
+    │       └── RestTemplateConfig.java      #   - HTTP 客户端配置（5秒超时）
+    │
+    └── resources/
+        ├── application.yml                  # 【主配置】数据库连接、微信 appid/secret、同步密钥
+        └── schema.sql                       # 【建表脚本】首次部署时手动执行，创建 fandian 库和表
+```
+
+## 快速启动步骤
+
+### 1. 环境准备
+- JDK 1.8+
+- MySQL 8.0
+- Maven 3.6+
+
+### 2. 创建数据库
+在 MySQL 中执行 `src/main/resources/schema.sql`：
+```sql
+source schema.sql;
+```
+
+### 3. 修改配置
+编辑 `src/main/resources/application.yml`，修改以下配置项：
+- `spring.datasource.password` — 你的 MySQL 密码
+- `wechat.appid` — 你的微信小程序 AppID
+- `wechat.secret` — 你的微信小程序 Secret
+- `sync.secret-key` — 自定义的同步密钥（Python 爬虫也配相同的）
+
+### 4. 启动项目
+```bash
+cd 饭电-backend
+mvn clean package -DskipTests
+java -jar target/fandian-backend-1.0.0.jar
+```
+
+或直接使用 Maven 插件：
+```bash
+mvn spring-boot:run
+```
+
+### 5. 验证接口
+```bash
+# 测试登录接口
+curl -X POST http://localhost:8080/api/user/login \
+  -H "Content-Type: application/json" \
+  -d '{"code":"test_code", "nickname":"测试用户"}'
+
+# 测试随机抽选接口
+curl http://localhost:8080/api/food/random \
+  -H "Authorization: USER_OPENID"
+
+# 测试数据同步接口
+curl -X POST http://localhost:8080/api/admin/sync \
+  -H "Content-Type: application/json" \
+  -H "Sync-Key: your_sync_secret_key" \
+  -d '[{"name":"黄焖鸡","price":15.0,"canteen":"教一食堂","window":"12号"}]'
+```
+
+## 技术栈
+| 组件 | 版本 | 用途 |
+|------|------|------|
+| Spring Boot | 2.7.18 | 基础框架 |
+| Spring Data JPA | — | ORM 数据访问 |
+| MySQL | 8.0 | 关系型数据库 |
+| RestTemplate | — | 调用微信 API |
+| Lombok | — | 简化代码（可选） |

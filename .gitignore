@@ -19,30 +19,30 @@ Thumbs.db
 # ==========================================
 # 2. 前端 (Uni-app / Vue / Node.js) 忽略
 # ==========================================
-fandian-frontend/node_modules/
-fandian-frontend/unpackage/
-fandian-frontend/.sourcemaps/
-fandian-frontend/.hbuilderx/
+frontend/node_modules/
+frontend/unpackage/
+frontend/.sourcemaps/
+frontend/.hbuilderx/
 
 # ==========================================
 # 3. 后端 (Java / Spring Boot / Maven) 忽略
 # ==========================================
-fandian-backend/target/
-fandian-backend/*.compiled
-fandian-backend/.classpath
-fandian-backend/.project
-fandian-backend/.settings/
-fandian-backend/*.hprof
-fandian-backend/*.pfx
+backend/target/
+backend/*.compiled
+backend/.classpath
+backend/.project
+backend/.settings/
+backend/*.hprof
+backend/*.pfx
 
 # ==========================================
 # 4. 数据组 (Python / 爬虫) 忽略
 # ==========================================
-fandian-crawler/__pycache__/
-fandian-crawler/*.pyc
-fandian-crawler/*.pyo
-fandian-crawler/*.pyd
-fandian-crawler/.venv/
-fandian-crawler/venv/
-fandian-crawler/ENV/
-fandian-crawler/.pytest_cache/
+crawler/__pycache__/
+crawler/*.pyc
+crawler/*.pyo
+crawler/*.pyd
+crawler/.venv/
+crawler/venv/
+crawler/ENV/
+crawler/.pytest_cache/
