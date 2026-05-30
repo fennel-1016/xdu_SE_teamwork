@@ -1,0 +1,22 @@
+{
+  "name": "Fandian",
+  "appid": "__UNI__FANDIAN",
+  "description": "Campus food random picker mini program",
+  "versionName": "1.0.0",
+  "versionCode": "100",
+  "transformPx": false,
+  "mp-weixin": {
+    "appid": "wx07f51ff5b1461249",
+    "setting": {
+      "urlCheck": false,
+      "es6": true,
+      "postcss": true,
+      "minified": true
+    },
+    "usingComponents": true
+  },
+  "uniStatistics": {
+    "enable": false
+  },
+  "vueVersion": "2"
+}

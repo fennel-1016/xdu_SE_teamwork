@@ -1,0 +1,19 @@
+{
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "Fandian",
+        "navigationBarBackgroundColor": "#fff7ed",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "Fandian",
+    "navigationBarBackgroundColor": "#fff7ed",
+    "backgroundColor": "#fff7ed"
+  }
+}
