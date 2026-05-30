@@ -1,30 +1,78 @@
-饭电 (Fandian) - 前端微信小程序模块 📱
-本模块目前为主项目的子文件夹，负责承载基于 Uni-app 框架开发的小程序客户端。
-🛠️ 第一步：初始化 Uni-app 项目
-请前端负责人按照以下步骤，把框架结构初始化到当前 frontend 文件夹内：
-下载并打开 HBuilderX 编辑器（推荐）。
-点击上方菜单栏：文件 -> 新建 -> 项目。
-选择 uni-app：
-项目名称：填写 frontend。
-存储路径：选择你们本地的 XDU_SE_TEAMWORK/ 根目录。
-模板：选择 默认模板（推荐 Vue3 规范）。
-创建成功后，HBuilderX 会自动在当前文件夹下生成一套标准的 Uni-app 目录结构（含 pages、static、manifest.json 等）。
-打开 manifest.json，点击 “微信小程序配置”，填入团队共用的小程序测试号 AppID。
-🚀 第二步：配置本地局域网联调环境
-为了让小程序在开发阶段能顺利访问到后端同学的 Java 接口，请务必进行以下两项配置：
-1. 微信开发者工具设置
-用 HBuilderX 将项目运行到微信开发者工具后，在工具右上角点击：
-详情 -> 本地设置 -> 勾选 “不校验合法域名、web-view(业务域名)、TLS版本以及HTTPS证书”。
-（如果不勾选此项，小程序将无法请求本地或局域网内的临时 IP 地址）
-2. 请求基地址配置 (开发约定)
-在项目中创建网络请求封装文件（如 utils/request.js），将其中的 baseURL 提取为公共变量。每天开工前，根据后端同学报告的局域网 IP 进行修改，代码示例如下：
-const baseURL = 'http://192.168.x.x:8080';
-（注意：联调时千万不要把写死成他人 IP 的代码直接推送到 main 分支，本地修改即可）
-📌 当前核心功能开发节点（按优先级排序）
-[ ] 1. 微信静默登录
-应用启动时自动调用 uni.login 获取临时 code 发送给后端，换回 OpenID 并通过 uni.setStorageSync 缓存到本地。
-[ ] 2. 大转盘视觉与动画
-利用 CSS3 animation 属性或 Canvas 实现转盘的无限旋转以及减速平滑停止的视觉效果。
-[ ] 3. 闪电抽选核心联动
-点击抽选 -> 锁定按钮并启动转盘动画 -> 异步请求后端 /api/food/random 接口 -> 收到数据后控制转盘停止 -> 弹出卡片展示美食结果。
-可自行更改调整readme文件
+# 饭电 Uni-app 前端
+
+本目录是“饭电”微信小程序前端模块，基于 Uni-app + Vue2 实现课程项目 MVP。
+
+## 已实现功能
+
+- 启动后通过 `uni.login` 获取微信临时登录 `code`
+- 调用后端 `POST /api/user/login`，缓存返回的 `openid`
+- 首页展示随机转盘和“闪电抽选”入口
+- 点击抽选后锁定按钮、播放转盘动画，并调用 `GET /api/food/random`
+- 通过 `Authorization: OPENID` 请求头传递用户身份
+- 展示菜品名称、价格、食堂和窗口信息
+- 对登录失败、网络失败、空数据、身份失效等场景给出 Toast 提示
+
+## 目录结构
+
+```text
+frontend/
+├── App.vue
+├── main.js
+├── manifest.json
+├── pages.json
+├── pages/index/index.vue
+└── utils/
+    ├── api.js
+    ├── auth.js
+    ├── config.js
+    └── request.js
+```
+
+## 本地联调
+
+1. 用 HBuilderX 打开 `frontend` 目录。
+2. 在 `manifest.json` 的微信小程序配置里填写团队测试 AppID。
+3. 在 `utils/config.js` 中把 `API_BASE_URL` 改成后端地址，例如：
+
+```js
+export const API_BASE_URL = 'http://192.168.x.x:8080'
+```
+
+4. 运行到微信开发者工具。
+5. 开发阶段需要在微信开发者工具中勾选“不校验合法域名、web-view、TLS 版本以及 HTTPS 证书”。
+
+## 后端接口约定
+
+登录：
+
+```http
+POST /api/user/login
+Content-Type: application/json
+
+{
+  "code": "wx_login_code",
+  "nickname": "饭电用户"
+}
+```
+
+随机抽选：
+
+```http
+GET /api/food/random
+Authorization: OPENID
+```
+
+响应统一按后端 `Result` 结构处理：
+
+```json
+{
+  "code": 200,
+  "msg": "成功",
+  "data": {
+    "name": "黄焖鸡",
+    "price": 15.0,
+    "canteen": "教一食堂",
+    "window": "12号窗口"
+  }
+}
+```
