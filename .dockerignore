@@ -1,0 +1,13 @@
+.git
+.idea
+.vscode
+**/target
+**/logs
+**/*.log
+**/.DS_Store
+frontend/node_modules
+frontend/unpackage
+crawler/.venv
+crawler/__pycache__
+backend/application-local.yml
+backend/src/main/resources/application-local.yml

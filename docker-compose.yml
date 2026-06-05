@@ -1,0 +1,44 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: fandian-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: fandian
+      TZ: Asia/Shanghai
+    ports:
+      - "3307:3306"
+    volumes:
+      - fandian-mysql-data:/var/lib/mysql
+      - ./backend/src/main/resources/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p123456"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: fandian-backend:1.0.0
+    container_name: fandian-backend
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/fandian?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf-8&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 123456
+      WECHAT_APPID: wx07f51ff5b1461249
+      WECHAT_SECRET: replace_with_your_wechat_secret
+      SYNC_SECRET_KEY: your_sync_secret_key
+      JAVA_OPTS: -Xms256m -Xmx512m
+      TZ: Asia/Shanghai
+    ports:
+      - "8080:8080"
+
+volumes:
+  fandian-mysql-data:

@@ -5,6 +5,9 @@ my.ini
 start-mysql.bat
 stop-mysql.bat
 application-prod.yml
+application-local.yml
+backend/application-local.yml
+backend/src/main/resources/application-local.yml
 
 # ==========================================
 # 1. 全局与系统文件忽略
@@ -28,6 +31,7 @@ frontend/.hbuilderx/
 # 3. 后端 (Java / Spring Boot / Maven) 忽略
 # ==========================================
 backend/target/
+backend/logs/
 backend/*.compiled
 backend/.classpath
 backend/.project
