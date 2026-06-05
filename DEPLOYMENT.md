@@ -4,8 +4,6 @@
 
 - `Dockerfile`：构建饭电后端镜像
 - `docker-compose.yml`：本地一键启动 MySQL + 后端
-- `k8s/mysql-deployment.yaml`：Kubernetes MySQL 部署示例
-- `k8s/backend-deployment.yaml`：Kubernetes 后端部署示例
 
 ## 1. Docker 镜像构建
 
@@ -55,32 +53,7 @@ docker compose down
 docker compose down -v
 ```
 
-## 3. Kubernetes 部署示例
-
-先构建镜像并推送到镜像仓库，或在本地集群中加载镜像：
-
-```bash
-docker build -t fandian-backend:1.0.0 .
-```
-
-应用配置：
-
-```bash
-kubectl apply -f k8s/mysql-deployment.yaml
-kubectl apply -f k8s/backend-deployment.yaml
-```
-
-查看服务：
-
-```bash
-kubectl get pods
-kubectl get svc mysql
-kubectl get svc fandian-backend
-```
-
-示例中服务类型为 `NodePort`，端口为 `30080`。
-
-## 4. 配置说明
+## 3. 配置说明
 
 容器运行时通过环境变量覆盖后端配置：
 

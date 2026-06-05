@@ -1,6 +1,6 @@
 # 饭电项目
 
-饭电是一个面向校园食堂选择场景的微信小程序课程项目。项目包含 Uni-app 前端、Spring Boot 后端、Python 数据爬取模块，并提供 Docker 与 Kubernetes 部署配置。
+饭电是一个面向校园食堂选择场景的微信小程序课程项目。项目包含 Uni-app 前端、Spring Boot 后端、Python 数据爬取模块，并提供 Docker 部署配置。
 
 ## 项目结构
 
@@ -10,7 +10,6 @@ xdu_SE_teamwork/
 ├── backend/               # Spring Boot 后端服务
 ├── crawler/               # Python 数据爬取与同步模块
 ├── docker/                # Docker 构建辅助配置
-├── k8s/                   # Kubernetes 部署示例
 ├── _docs/                 # 需求、设计、测试等课程文档
 ├── Dockerfile             # 后端服务镜像构建文件
 ├── docker-compose.yml     # MySQL + 后端一键部署配置
